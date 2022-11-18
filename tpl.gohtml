@@ -2,9 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>Slice Data</title>
 </head>
 <body>
-<h1>The Number from Go Code is: {{.}}</h1> 
+<ul>
+    {{range $index, $name := .}}
+    <li>{{$index}} - {{$name}}</li>
+    {{end}}
+</ul>
 </body>
 </html>
