@@ -1,29 +1,20 @@
 package main
 
 import (
-  "fmt"
-  "html/template"
-  "net/http"
+   "fmt"
+   "net/http"
 )
 
 func main() {
-  // We're creating a file handler, here.
-  fs := http.FileServer(http.Dir("/html/assets/img/about/"))
+   http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+      fmt.Fprintf(w, "Hyeonho aws test success!!")
+   })
 
-  http.HandleFunc("/html/assets/img/about/", images)
+   http.HandleFunc("/greet/", func(w http.ResponseWriter, r *http.Request) {
+      name := r.URL.Path[len("/greet/"):]
+      fmt.Fprintf(w, "Hello %s\n", name)
+   })
 
-  // We're binding the handler to the `/images` route, here.
-  http.Handle("/html/assets/img/about/", http.StripPrefix("/html/assets/img/about/", fs))
+   http.ListenAndServe(":8080", nil)
 
-  http.ListenAndServe(":8080", nil)
-}
-
-func images(w http.ResponseWriter, r *http.Request) {
-  t, err := template.ParseFiles("/test.html")
-  if err != nil {
-    fmt.Fprintf(w, err.Error())
-    return
-  }
-
-  t.ExecuteTemplate(w, "html", nil)
 }
