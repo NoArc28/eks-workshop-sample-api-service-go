@@ -3,6 +3,8 @@ package main
 import (
    "fmt"
    "net/http"
+   
+   "github.com/NoArc28/eks-workshop-sample-api-service-go"
 )
 
 func main() {
