@@ -1,12 +1,20 @@
 package main
- 
+
 import (
-    "net/http"
-    "github.com/NoArc28/eks-workshop-sample-api-service-go/html"
+    "log"
+    "os"
+    "text/template"
 )
- 
-func main() {   
-    http.Handle("/", http.FileServer(http.Dir("html/")))
-    //http.Handle("/static", http.FileServer(http.Dir("wwwroot")))
-    http.ListenAndServe(":8080", nil)
+
+var tpl *template.Template
+
+func init() {
+    tpl = template.Must(template.ParseFiles("tpl.gohtml"))
+}
+
+func main() {
+    err := tpl.ExecuteTemplate(os.Stdout, "tpl.gohtml", 42)
+    if err != nil {
+        log.Fatalln(err)
+    }
 }
