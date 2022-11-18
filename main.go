@@ -1,23 +1,29 @@
 package main
 
 import (
-    "log"
-    "os"
-    "text/template"
+  "fmt"
+  "html/template"
+  "net/http"
 )
 
-var tpl *template.Template
+func main() {
+  // We're creating a file handler, here.
+  fs := http.FileServer(http.Dir("/html/assets/img/about/"))
 
-func init() {
-    tpl = template.Must(template.ParseFiles("tpl.gohtml"))
+  http.HandleFunc("/html/assets/img/about/", images)
+
+  // We're binding the handler to the `/images` route, here.
+  http.Handle("/html/assets/img/about/", http.StripPrefix("/html/assets/img/about/", fs))
+
+  http.ListenAndServe(":8080", nil)
 }
 
-func main() {
+func images(w http.ResponseWriter, r *http.Request) {
+  t, err := template.ParseFiles("/test.html")
+  if err != nil {
+    fmt.Fprintf(w, err.Error())
+    return
+  }
 
-    sages := []string{"This", "is", "a", "string", "slice"}
-
-    err := tpl.Execute(os.Stdout, sages)
-    if err != nil {
-        log.Fatalln(err)
-    }
+  t.ExecuteTemplate(w, "html", nil)
 }
