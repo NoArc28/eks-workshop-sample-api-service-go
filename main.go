@@ -1,24 +1,20 @@
 package main
 
 import (
-	"net/http"
-
-	"github.com/gin-gonic/gin"
+   "fmt"
+   "net/http"
 )
 
 func main() {
-	r := gin.Default()
+   http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+      fmt.Fprintf(w, "Hyeonho aws test success!!")
+   })
 
-	r.LoadHTMLGlob("templates/*")
+   http.HandleFunc("/greet/", func(w http.ResponseWriter, r *http.Request) {
+      name := r.URL.Path[len("/greet/"):]
+      fmt.Fprintf(w, "Hello %s\n", name)
+   })
 
-	r.GET("/", func(c *gin.Context) {		
-        // OK 이면 index.html파일에 JSON데이터를 넘겨서 보여줌 
-		c.HTML(http.StatusOK, "index.html", gin.H{
-				"title": "Home Page",
-			},
-		)
-	})
-
-	r.Run()
+   http.ListenAndServe(":8080", nil)
 
 }
