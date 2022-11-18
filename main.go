@@ -1,20 +1,11 @@
 package main
-
+ 
 import (
-   "fmt"
-   "net/http"
+    "net/http"
 )
-
-func main() {
-   http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-      fmt.Fprintf(w, "Hyeonho aws test success!!")
-   })
-
-   http.HandleFunc("/greet/", func(w http.ResponseWriter, r *http.Request) {
-      name := r.URL.Path[len("/greet/"):]
-      fmt.Fprintf(w, "Hello %s\n", name)
-   })
-
-   http.ListenAndServe(":8080", nil)
-
+ 
+func main() {   
+    http.Handle("/", http.FileServer(http.Dir("html")))
+    //http.Handle("/static", http.FileServer(http.Dir("wwwroot")))
+    http.ListenAndServe(":8080", nil)
 }
